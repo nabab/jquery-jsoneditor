@@ -24,6 +24,7 @@
         $$.editor_options.modes = ["tree", "text"];
       }
       $$._make();
+      appui.fn.log($$.element, $$.element.val());
       if ( v ){
         $$.editor.set(JSON.parse(v));
       }

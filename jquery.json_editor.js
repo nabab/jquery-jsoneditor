@@ -6,16 +6,18 @@
     _create: function(){
       var $$ = this,
           o = $$.options,
-          v = $$.element.val();
+          v = $$.element.val(),
+          trigger = true;
       $$.h = parseInt($$.element.css("height"));
       if ( !($$.h > 50) ){
         $$.h = 400;
       }
-      $$.element.wrap('<div></div>');
+      $$.element.addClass($$.widgetFullName).wrap('<div></div>');
       $$.container = $$.element.parent();
       $$.editor_options = {
         mode: $$.element.is('[readonly]') || $$.element.is(':disabled') ? "view" : "tree",
         change: function(){
+          trigger = false,
           $$.element.val(JSON.stringify($$.editor.get())).trigger("change");
         },
         name: "Objet de configuration"
@@ -24,10 +26,17 @@
         $$.editor_options.modes = ["tree", "text"];
       }
       $$._make();
-      appui.fn.log($$.element, $$.element.val());
       if ( v ){
         $$.editor.set(JSON.parse(v));
       }
+      $$.element.on("change", function(){
+        if ( trigger ){
+          $$.editor.set(JSON.parse($$.element.val()));
+        }
+        else{
+          trigger = true;
+        }
+      });
     },
     _make: function(){
       var $$ = this;
